@@ -1,0 +1,97 @@
+{
+  "extends": [
+    "tslint:recommended",
+    "tslint-config-prettier"
+  ],
+  "rulesDirectory": [
+    "tslint-plugin-prettier"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2016,
+    "sourceType": "module"
+  },
+  "env": {
+    "es6": true,
+    "node": true
+  },
+  "rules": {
+    "prettier": [
+      true,
+      {
+        "printWidth": 80,
+        "tabWidth": 2,
+        "semi": false,
+        "singleQuote": true,
+        "trailingComma": "es5",
+        "arrowParens": "always"
+      }
+    ],
+    "ordered-imports": false,
+    "interface-name": false,
+    "prefer-const": false,
+    "object-literal-sort-keys": false,
+    "ban-types": [
+      true,
+      [
+        "Object"
+      ]
+    ],
+    "member-access": false,
+    "member-ordering": [
+      true,
+      [
+        "static-field",
+        "static-method",
+        "instance-field",
+        "instance-method"
+      ]
+    ],
+    "no-empty": false,
+    "variable-name": [
+      true,
+      "check-format",
+      "allow-pascal-case"
+    ],
+    "array-type": [
+      true,
+      "array"
+    ],
+    "no-shadowed-variable": false,
+    "no-unused-expression": [
+      true,
+      "allow-fast-null-checks"
+    ],
+    "prefer-for-of": false
+  },
+  "jsRules": {
+    "prettier": [
+      true,
+      {
+        "printWidth": 80,
+        "tabWidth": 2,
+        "semi": false,
+        "singleQuote": true,
+        "trailingComma": "es5",
+        "arrowParens": "always"
+      }
+    ],
+    "ordered-imports": false,
+    "interface-name": false,
+    "prefer-const": false,
+    "object-literal-sort-keys": false,
+    "member-access": false,
+    "member-ordering": false,
+    "no-empty": false,
+    "variable-name": [
+      true,
+      "check-format",
+      "allow-pascal-case"
+    ],
+    "no-shadowed-variable": false,
+    "no-unused-expression": [
+      true,
+      "allow-fast-null-checks"
+    ],
+    "prefer-for-of": false
+  }
+}
