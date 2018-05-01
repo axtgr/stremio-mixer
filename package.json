@@ -13,9 +13,13 @@
     "build": "del-cli build/** && tsc"
   },
   "dependencies": {
-    "source-map-support": "^0.5.5"
+    "express": "^4.16.3",
+    "source-map-support": "^0.5.5",
+    "stremio-addons": "^2.8.14"
   },
   "devDependencies": {
+    "@types/express": "^4.11.1",
+    "@types/node": "^10.1.0",
     "del-cli": "^1.1.0",
     "prettier": "^1.12.1",
     "tslint": "^5.10.0",
