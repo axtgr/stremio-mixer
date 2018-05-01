@@ -16,7 +16,7 @@ declare module 'stremio-addons' {
   }
 
   interface Method<R extends object> {
-    (req: Request, cb: (err: Error | null, res?: R) => void): void
+    (req: Request | SearchRequest, cb: (err: Error | null, res?: R) => void): void
   }
 
   interface Methods {

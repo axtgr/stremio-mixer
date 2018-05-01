@@ -3,9 +3,10 @@ import {
   Server as StremioServer,
   Request,
   SearchRequest,
-  Method,
+  Methods,
 } from 'stremio-addons'
 import express = require('express')
+import Mixer from './Mixer'
 
 const MANIFEST = {
   name: 'Mixer',
@@ -25,8 +26,32 @@ const MANIFEST = {
   ],
 }
 
+let mixer = new Mixer()
+let methods: Methods = {
+  'meta.get': (request: Request, callback) => {
+    return mixer
+      .getChannel(request)
+      .then((response) => callback(null, response), callback)
+  },
+  'meta.find': (request: Request, callback) => {
+    return mixer
+      .findChannels(request)
+      .then((response) => callback(null, response), callback)
+  },
+  'meta.search': (request: SearchRequest, callback) => {
+    return mixer
+      .findChannels(request)
+      .then((response) => callback(null, response), callback)
+  },
+  'stream.find': (request: Request, callback) => {
+    return mixer
+      .getStreams(request)
+      .then((response) => callback(null, response), callback)
+  },
+}
+
 let app = express()
-let addon = new StremioServer({}, MANIFEST)
+let addon = new StremioServer(methods, MANIFEST)
 
 app.use(addon.middleware)
 app.listen(80, () => {
