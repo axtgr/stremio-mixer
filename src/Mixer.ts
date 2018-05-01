@@ -24,6 +24,8 @@ class Mixer {
 
     if (channel.thumbnail) {
       thumbnailUrl = channel.thumbnail.url
+    } else {
+      thumbnailUrl = `https://thumbs.mixer.com/channel/${channel.id}.small.jpg`
     }
 
     return {
