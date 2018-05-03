@@ -1,3 +1,5 @@
+// Docs: https://dev.mixer.com/rest.html
+
 import {
   Client,
   DefaultRequestRunner,
@@ -39,6 +41,8 @@ class Mixer {
   }
 
   private _transformChannel(channel: Channel) {
+    // https://github.com/Stremio/stremio-addons/blob/master/docs/api/meta/meta.element.md
+
     let url = `https://mixer.com/${channel.token}`
     let thumbnailUrl
 
@@ -63,6 +67,8 @@ class Mixer {
   }
 
   private async _getTypeId(typeName: string): Promise<number | undefined> {
+    // https://dev.mixer.com/rest.html#types_get
+
     let options = {
       qs: {
         fields: 'id',
@@ -76,6 +82,10 @@ class Mixer {
   }
 
   async findChannels(request: Request | SearchRequest) {
+    // https://dev.mixer.com/rest.html#channels_get
+    // Limited by the "channel-search" bucket to 20 requests per 5 seconds
+
+    // We assume that skip is a multiple of limit, so pagination is simplified
     let { query, skip = 0, limit = 100 } = request
     let qs: any = {
       limit,
@@ -104,6 +114,9 @@ class Mixer {
   }
 
   async getChannel(req: Request) {
+    // https://dev.mixer.com/rest.html#channels__channelIdOrToken__get
+    // Limited by the "channel-read" bucket to 1000 requests per 300 seconds
+
     let id = req.query[this.idProperty]
     let options = {
       qs: {
@@ -118,6 +131,8 @@ class Mixer {
   }
 
   async getStreams(req: Request) {
+    // https://dev.mixer.com/rest.html#channels__channelId__manifest_m3u8_get
+
     let id = req.query[this.idProperty]
     let url = this.client.buildAddress(
       this.client.urls.api,
