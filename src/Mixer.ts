@@ -12,11 +12,19 @@ type Channel = IChannel & {
   }
 }
 
+interface Options {
+  idProperty: string
+}
+
 const CHANNEL_FIELDS = 'id,token,name,viewersCurrent,type,bannerUrl,thumbnail'
-const ID_PROPERTY = 'mixer_id'
 
 class Mixer {
   private client = new Client(new DefaultRequestRunner())
+  private idProperty: string
+
+  constructor(options: Options) {
+    this.idProperty = options.idProperty
+  }
 
   private _validateResponse(res: IResponse<any>) {
     let { body, statusCode } = res
@@ -41,7 +49,7 @@ class Mixer {
     }
 
     return {
-      id: `${ID_PROPERTY}:${channel.id}`,
+      id: `${this.idProperty}:${channel.id}`,
       name: channel.token,
       description: `${channel.name}\n\n${url}`,
       genre: channel.type ? [channel.type.name] : undefined,
@@ -96,7 +104,7 @@ class Mixer {
   }
 
   async getChannel(req: Request) {
-    let id = req.query[ID_PROPERTY]
+    let id = req.query[this.idProperty]
     let options = {
       qs: {
         fields: CHANNEL_FIELDS,
@@ -110,7 +118,7 @@ class Mixer {
   }
 
   async getStreams(req: Request) {
-    let id = req.query[ID_PROPERTY]
+    let id = req.query[this.idProperty]
     let url = this.client.buildAddress(
       this.client.urls.api,
       `channels/${id}/manifest.m3u8`
@@ -119,7 +127,7 @@ class Mixer {
     return [
       {
         url,
-        [ID_PROPERTY]: id,
+        [this.idProperty]: id,
         title: 'Watch',
         tags: ['hls'],
         isFree: true,
@@ -128,5 +136,4 @@ class Mixer {
   }
 }
 
-export default Mixer
-export { ID_PROPERTY }
+export { Mixer as default, Options }
