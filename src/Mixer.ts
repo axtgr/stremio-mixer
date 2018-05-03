@@ -18,6 +18,18 @@ const ID_PROPERTY = 'mixer_id'
 class Mixer {
   private client = new Client(new DefaultRequestRunner())
 
+  private _validateResponse(res: IResponse<any>) {
+    let { body, statusCode } = res
+
+    if (body && body.error) {
+      throw new Error(`${body.statusCode} ${body.error}: ${body.message}`)
+    }
+
+    if (statusCode >= 400) {
+      throw new Error(`Error ${statusCode}`)
+    }
+  }
+
   private _transformChannel(channel: Channel) {
     let url = `https://mixer.com/${channel.token}`
     let thumbnailUrl
@@ -51,6 +63,7 @@ class Mixer {
     }
 
     let res = await this.client.request('GET', 'types', options)
+    this._validateResponse(res)
     return res.body ? (res.body as any[])[0].id : undefined
   }
 
@@ -77,6 +90,7 @@ class Mixer {
     }
 
     let res = await this.client.request('GET', 'channels', { qs })
+    this._validateResponse(res)
     let results = res.body as Channel[] | undefined
     return results ? results.map((item) => this._transformChannel(item)) : []
   }
@@ -90,6 +104,7 @@ class Mixer {
     }
 
     let res = await this.client.request('GET', `channels/${id}`, options)
+    this._validateResponse(res)
     let result = res.body as Channel | undefined
     return result ? this._transformChannel(result) : undefined
   }
