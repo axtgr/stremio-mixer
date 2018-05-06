@@ -7,6 +7,7 @@ import {
   IResponse,
 } from 'beam-client-node'
 import { Request, SearchRequest } from 'stremio-addons'
+import NodeCache = require('node-cache')
 
 type Channel = IChannel & {
   thumbnail: {
@@ -16,16 +17,54 @@ type Channel = IChannel & {
 
 interface Options {
   idProperty: string
+  cache?: boolean
 }
 
 const CHANNEL_FIELDS = 'id,token,name,viewersCurrent,type,bannerUrl,thumbnail'
+const CACHE_TTLS = {
+  _getTypeId: 60 * 60,
+  findChannels: 5 * 60,
+  getChannel: 5 * 60,
+}
+
+function cacheable(ttl: number) {
+  return function cacheableDecorator(
+    target: Mixer,
+    methodName: string,
+    descriptor: PropertyDescriptor
+  ) {
+    let rawMethod = descriptor.value
+    descriptor.value = function cachedMethod(arg: any) {
+      if (!this.cache) {
+        return rawMethod.call(this, arg)
+      }
+
+      let key = `${methodName}:${JSON.stringify(arg)}`
+      let result = this.cache.get(key)
+
+      if (result) {
+        return Promise.resolve(result)
+      }
+
+      return rawMethod.call(this, arg).then((result: any) => {
+        this.cache.set(key, result, ttl)
+        return result
+      })
+    }
+  }
+}
 
 class Mixer {
   private client = new Client(new DefaultRequestRunner())
   private idProperty: string
+  private cache: NodeCache
 
   constructor(options: Options) {
     this.idProperty = options.idProperty
+
+    if (options.cache) {
+      this.cache = new NodeCache({ checkperiod: 3 * 60 })
+    }
   }
 
   private _validateResponse(res: IResponse<any>) {
@@ -66,6 +105,7 @@ class Mixer {
     }
   }
 
+  @cacheable(CACHE_TTLS._getTypeId)
   private async _getTypeId(typeName: string): Promise<number | undefined> {
     // https://dev.mixer.com/rest.html#types_get
 
@@ -81,6 +121,7 @@ class Mixer {
     return res.body ? (res.body as any[])[0].id : undefined
   }
 
+  @cacheable(CACHE_TTLS.findChannels)
   async findChannels(request: Request | SearchRequest) {
     // https://dev.mixer.com/rest.html#channels_get
     // Limited by the "channel-search" bucket to 20 requests per 5 seconds
@@ -113,6 +154,7 @@ class Mixer {
     return results ? results.map((item) => this._transformChannel(item)) : []
   }
 
+  @cacheable(CACHE_TTLS.getChannel)
   async getChannel(req: Request) {
     // https://dev.mixer.com/rest.html#channels__channelIdOrToken__get
     // Limited by the "channel-read" bucket to 1000 requests per 300 seconds

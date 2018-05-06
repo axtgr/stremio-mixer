@@ -26,7 +26,10 @@ const MANIFEST = {
   ],
 }
 
-let mixer = new Mixer({ idProperty: MANIFEST.idProperty })
+let mixer = new Mixer({
+  idProperty: MANIFEST.idProperty,
+  cache: true,
+})
 let methods: Methods = {
   'meta.get': (request: Request, callback) => {
     return mixer
