@@ -1,7 +1,7 @@
 {
   "name": "stremio-mixer",
   "version": "0.0.0",
-  "description": "",
+  "description": "Watch live streams from Mixer.com in Stremio",
   "author": "Alex Schneider <me@schneider.ax>",
   "license": "ISC",
   "files": [

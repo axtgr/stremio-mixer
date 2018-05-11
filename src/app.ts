@@ -8,11 +8,14 @@ import {
 import express = require('express')
 import Mixer from './Mixer'
 
+// tslint:disable-next-line:no-var-requires
+const pkg = require('../package.json')
+
 const MANIFEST = {
   name: 'Mixer',
   id: 'org.stremio.mixer',
-  version: '0.0.0',
-  description: `Watch live streams from Mixer.com`,
+  version: pkg.version,
+  description: pkg.description,
   types: ['tv'],
   idProperty: 'mixer_id',
   dontAnnounce: true,
