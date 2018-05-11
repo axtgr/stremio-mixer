@@ -27,6 +27,8 @@ const MANIFEST = {
       types: ['tv'],
     },
   ],
+  logo: '/logo.png',
+  background: '/background.jpg',
 }
 
 let mixer = new Mixer({
@@ -79,6 +81,7 @@ let methods: Methods = {
 let app = express()
 let addon = new StremioServer(methods, MANIFEST)
 
+app.use(express.static('public'))
 app.use(addon.middleware)
 app.listen(80, () => {
   // tslint:disable-next-line:no-console
