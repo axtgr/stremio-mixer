@@ -31,25 +31,45 @@ let mixer = new Mixer({
   cache: true,
 })
 let methods: Methods = {
-  'meta.get': (request: Request, callback) => {
-    return mixer
-      .getChannel(request)
-      .then((response) => callback(null, response), callback)
+  'meta.get': (req: Request, cb) => {
+    return mixer.getChannel(req).then(
+      (res) => cb(null, res),
+      (err) => {
+        // tslint:disable-next-line:no-console
+        console.error(err)
+        cb(err)
+      }
+    )
   },
-  'meta.find': (request: Request, callback) => {
-    return mixer
-      .findChannels(request)
-      .then((response) => callback(null, response), callback)
+  'meta.find': (req: Request, cb) => {
+    return mixer.findChannels(req).then(
+      (res) => cb(null, res),
+      (err) => {
+        // tslint:disable-next-line:no-console
+        console.error(err)
+        cb(err)
+      }
+    )
   },
-  'meta.search': (request: SearchRequest, callback) => {
-    return mixer
-      .findChannels(request)
-      .then((response) => callback(null, response), callback)
+  'meta.search': (req: SearchRequest, cb) => {
+    return mixer.findChannels(req).then(
+      (res) => cb(null, res),
+      (err) => {
+        // tslint:disable-next-line:no-console
+        console.error(err)
+        cb(err)
+      }
+    )
   },
-  'stream.find': (request: Request, callback) => {
-    return mixer
-      .getStreams(request)
-      .then((response) => callback(null, response), callback)
+  'stream.find': (req: Request, cb) => {
+    return mixer.getStreams(req).then(
+      (res) => cb(null, res),
+      (err) => {
+        // tslint:disable-next-line:no-console
+        console.error(err)
+        cb(err)
+      }
+    )
   },
 }
 
