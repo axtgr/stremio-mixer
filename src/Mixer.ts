@@ -188,6 +188,7 @@ class Mixer {
         title: 'Watch',
         tags: ['hls'],
         isFree: true,
+        availability: 2,
       },
     ]
   }
