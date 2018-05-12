@@ -6,19 +6,30 @@ import {
   Methods,
 } from 'stremio-addons'
 import express = require('express')
+import env = require('common-env')
 import Mixer from './Mixer'
 
 // tslint:disable-next-line:no-var-requires
 const pkg = require('../package.json')
+const config = env().getOrElseAll({
+  stremio_mixer: {
+    host: 'localhost',
+    port: 80,
+    cache: true,
+    announce: false,
+    email: '',
+  },
+}).stremio_mixer
 
 const MANIFEST = {
   name: 'Mixer',
   id: 'org.stremio.mixer',
   version: pkg.version,
   description: pkg.description,
+  email: config.email,
   types: ['tv'],
   idProperty: 'mixer_id',
-  dontAnnounce: true,
+  dontAnnounce: !config.announce,
   isFree: true,
   sorts: [
     {
@@ -27,13 +38,14 @@ const MANIFEST = {
       types: ['tv'],
     },
   ],
-  logo: '/logo.png',
-  background: '/background.jpg',
+  endpoint: `http://${config.host}:${config.port}/stremio/v1`,
+  logo: `http://${config.host}:${config.port}/logo.png`,
+  background: `http://${config.host}:${config.port}/background.jpg`,
 }
 
 let mixer = new Mixer({
   idProperty: MANIFEST.idProperty,
-  cache: true,
+  cache: config.cache,
 })
 let methods: Methods = {
   'meta.get': (req: Request, cb) => {
@@ -83,7 +95,7 @@ let addon = new StremioServer(methods, MANIFEST)
 
 app.use(express.static('public'))
 app.use(addon.middleware)
-app.listen(80, () => {
+app.listen(config.port, () => {
   // tslint:disable-next-line:no-console
-  console.log('Stremio Mixer listening on port 80')
+  console.log(`Stremio Mixer listening on http://${config.host}:${config.port}`)
 })
