@@ -21,6 +21,7 @@ const config = env().getOrElseAll({
   },
 }).stremio_mixer
 
+const ADDRESS = `http://${config.host}:${config.port}`
 const MANIFEST = {
   name: 'Mixer',
   id: 'org.stremio.mixer',
@@ -38,9 +39,9 @@ const MANIFEST = {
       types: ['tv'],
     },
   ],
-  endpoint: `http://${config.host}:${config.port}/stremio/v1`,
-  logo: `http://${config.host}:${config.port}/logo.png`,
-  background: `http://${config.host}:${config.port}/background.jpg`,
+  endpoint: `${ADDRESS}/stremioget/stremio/v1`,
+  logo: `${ADDRESS}/logo.png`,
+  background: `${ADDRESS}/background.jpg`,
 }
 
 let mixer = new Mixer({
@@ -98,9 +99,7 @@ if (require.main === module) {
   app.use(addon.middleware)
   app.listen(config.port, () => {
     // tslint:disable-next-line:no-console
-    console.log(
-      `Stremio Mixer listening on http://${config.host}:${config.port}`
-    )
+    console.log(`Stremio Mixer listening on ${ADDRESS}`)
   })
 }
 
