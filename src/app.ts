@@ -89,13 +89,19 @@ let methods: Methods = {
     )
   },
 }
-
-let app = express()
 let addon = new StremioServer(methods, MANIFEST)
 
-app.use(express.static('public'))
-app.use(addon.middleware)
-app.listen(config.port, () => {
-  // tslint:disable-next-line:no-console
-  console.log(`Stremio Mixer listening on http://${config.host}:${config.port}`)
-})
+// If this is the entry module, run the addon
+if (require.main === module) {
+  let app = express()
+  app.use(express.static('public'))
+  app.use(addon.middleware)
+  app.listen(config.port, () => {
+    // tslint:disable-next-line:no-console
+    console.log(
+      `Stremio Mixer listening on http://${config.host}:${config.port}`
+    )
+  })
+}
+
+export default addon
