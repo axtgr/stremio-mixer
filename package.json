@@ -5,8 +5,8 @@
   "author": "Alex Schneider <me@schneider.ax>",
   "license": "ISC",
   "files": [
-    "src",
-    "build"
+    "build",
+    "public"
   ],
   "scripts": {
     "test": "tape test/*",
