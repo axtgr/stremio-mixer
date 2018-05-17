@@ -100,6 +100,11 @@ if (require.main === module) {
   app.listen(config.port, () => {
     // tslint:disable-next-line:no-console
     console.log(`Stremio Mixer listening on ${ADDRESS}`)
+
+    if (!MANIFEST.dontAnnounce) {
+      // tslint:disable-next-line:no-console
+      console.log('Announcing the endpoint to Stremio tracker')
+    }
   })
 }
 
