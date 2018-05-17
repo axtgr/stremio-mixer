@@ -4,6 +4,7 @@
   "description": "Watch live streams from Mixer.com in Stremio",
   "author": "Alex Schneider <me@schneider.ax>",
   "license": "ISC",
+  "private": true,
   "files": [
     "build",
     "public"
