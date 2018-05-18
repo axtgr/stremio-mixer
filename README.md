@@ -14,7 +14,7 @@ The add-on is a node.js app written in TypeScript that retrieves stream URLs fro
 ## Installation
 
 ```
-git clone https://github.com/alex-shnayder/stremio-mixer
+git clone https://github.com/ax-schneider/stremio-mixer
 cd stremio-mixer
 npm install
 ```
