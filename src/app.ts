@@ -28,6 +28,7 @@ const MANIFEST = {
   version: pkg.version,
   description: pkg.description,
   email: config.email,
+  contactEmail: config.email,
   types: ['tv'],
   idProperty: 'mixer_id',
   dontAnnounce: !config.announce,
@@ -42,6 +43,11 @@ const MANIFEST = {
   endpoint: `${ADDRESS}/stremioget/stremio/v1`,
   logo: `${ADDRESS}/logo.png`,
   background: `${ADDRESS}/background.jpg`,
+  // OBSOLETE: used in pre-4.0 stremio instead of idProperty/types
+  filter: {
+    'query.mixer_id': { $exists: true },
+    'query.type': { $in: ['tv'] },
+  },
 }
 
 let mixer = new Mixer({
