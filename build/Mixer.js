@@ -93,7 +93,8 @@ class Mixer {
             };
             let res = yield this.client.request('GET', 'types', options);
             this._validateResponse(res);
-            return res.body ? res.body[0].id : undefined;
+            let body = res.body;
+            return body && body[0] && body[0].id;
         });
     }
     findChannels(request) {
