@@ -118,7 +118,8 @@ class Mixer {
 
     let res = await this.client.request('GET', 'types', options)
     this._validateResponse(res)
-    return res.body ? (res.body as any[])[0].id : undefined
+    let body: any = res.body
+    return body && body[0] && body[0].id
   }
 
   @cacheable(CACHE_TTLS.findChannels)
