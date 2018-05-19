@@ -7,7 +7,9 @@ import {
 } from 'stremio-addons'
 import express = require('express')
 import env = require('common-env')
+import { getClientIp } from 'request-ip'
 import Mixer from './Mixer'
+import Logger from './Logger'
 
 // tslint:disable-next-line:no-var-requires
 const pkg = require('../package.json')
@@ -18,6 +20,7 @@ const config = env().getOrElseAll({
     cache: true,
     announce: false,
     email: '',
+    log: 1,
   },
 }).stremio_mixer
 
@@ -50,47 +53,48 @@ const MANIFEST = {
   },
 }
 
+let logger = new Logger({ level: config.log })
 let mixer = new Mixer({
   idProperty: MANIFEST.idProperty,
   cache: config.cache,
 })
 let methods: Methods = {
   'meta.get': (req: Request, cb) => {
+    logger.log('info', 'meta.get', req)
     return mixer.getChannel(req).then(
       (res) => cb(null, res),
       (err) => {
-        // tslint:disable-next-line:no-console
-        console.error(err)
+        logger.log('error', 'error', err)
         cb(err)
       }
     )
   },
   'meta.find': (req: Request, cb) => {
+    logger.log('info', 'meta.find', req)
     return mixer.findChannels(req).then(
       (res) => cb(null, res),
       (err) => {
-        // tslint:disable-next-line:no-console
-        console.error(err)
+        logger.log('error', 'error', err)
         cb(err)
       }
     )
   },
   'meta.search': (req: SearchRequest, cb) => {
+    logger.log('info', 'meta.search', req)
     return mixer.findChannels(req).then(
       (res) => cb(null, res),
       (err) => {
-        // tslint:disable-next-line:no-console
-        console.error(err)
+        logger.log('error', 'error', err)
         cb(err)
       }
     )
   },
   'stream.find': (req: Request, cb) => {
+    logger.log('info', 'stream.find', req)
     return mixer.getStreams(req).then(
       (res) => cb(null, res),
       (err) => {
-        // tslint:disable-next-line:no-console
-        console.error(err)
+        logger.log('error', 'error', err)
         cb(err)
       }
     )
@@ -101,6 +105,10 @@ let addon = new StremioServer(methods, MANIFEST)
 // If this is the entry module, run the addon
 if (require.main === module) {
   let app = express()
+  app.use((req, res, next) => {
+    logger.log('debug', 'request', getClientIp(req), req.method, req.url)
+    next()
+  })
   app.use(express.static('public'))
   app.use(addon.middleware)
   app.listen(config.port, () => {
