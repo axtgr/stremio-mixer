@@ -7,6 +7,7 @@ import {
 } from 'stremio-addons'
 import express = require('express')
 import env = require('common-env')
+import chalk from 'chalk'
 import { getClientIp } from 'request-ip'
 import Mixer from './Mixer'
 import Logger from './Logger'
@@ -112,13 +113,22 @@ if (require.main === module) {
   app.use(express.static('public'))
   app.use(addon.middleware)
   app.listen(config.port, () => {
-    // tslint:disable-next-line:no-console
-    console.log(`Stremio Mixer listening on ${ADDRESS}`)
+    // tslint:disable:no-console
+    // Prints "mixer" ASCII art in its brand colors
+    console.log(`\
+${chalk.white('            _')}
+${chalk.white('           (_)')}
+${chalk.white(' _ __ ___   _ __ ')}${chalk.cyan(' __  ___  _ __')}
+${chalk.white("| '_ ` _ \\ | |\\ \\")}${chalk.cyan("/ / / _ \\| '__|")}
+${chalk.white('| | | | | || | > ')}${chalk.cyan(' < |  __/| |')}
+${chalk.white('|_| |_| |_||_|/_/')}${chalk.cyan('\\_\\ \\___||_|')}
+`)
+    console.log(`\nAddon is listening on ${chalk.green.underline(ADDRESS)}`)
 
     if (!MANIFEST.dontAnnounce) {
-      // tslint:disable-next-line:no-console
       console.log('Announcing the endpoint to Stremio tracker')
     }
+    // tslint:enable:no-console
   })
 }
 
