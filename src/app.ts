@@ -16,8 +16,8 @@ import Logger from './Logger'
 const pkg = require('../package.json')
 const config = env().getOrElseAll({
   stremio_mixer: {
-    host: 'localhost',
-    port: 80,
+    address: 'http://localhost',
+    port: process.env.PORT || 80,
     cache: true,
     announce: false,
     email: '',
@@ -25,7 +25,6 @@ const config = env().getOrElseAll({
   },
 }).stremio_mixer
 
-const ADDRESS = `http://${config.host}:${config.port}`
 const MANIFEST = {
   name: 'Mixer',
   id: 'org.stremio.mixer',
@@ -44,9 +43,9 @@ const MANIFEST = {
       types: ['tv'],
     },
   ],
-  endpoint: `${ADDRESS}/stremioget/stremio/v1`,
-  logo: `${ADDRESS}/logo.png`,
-  background: `${ADDRESS}/background.jpg`,
+  endpoint: `${config.address}/stremioget/stremio/v1`,
+  logo: `${config.address}/logo.png`,
+  background: `${config.address}/background.jpg`,
   // OBSOLETE: used in pre-4.0 stremio instead of idProperty/types
   filter: {
     'query.mixer_id': { $exists: true },
@@ -113,8 +112,9 @@ if (require.main === module) {
   app.use(express.static('public'))
   app.use(addon.middleware)
   app.listen(config.port, () => {
-    // tslint:disable:no-console
     // Prints "mixer" ASCII art in its brand colors
+    // and the endpoint address
+    // tslint:disable-next-line:no-console
     console.log(`\
 ${chalk.white('            _')}
 ${chalk.white('           (_)')}
@@ -122,13 +122,12 @@ ${chalk.white(' _ __ ___   _ __ ')}${chalk.cyan(' __  ___  _ __')}
 ${chalk.white("| '_ ` _ \\ | |\\ \\")}${chalk.cyan("/ / / _ \\| '__|")}
 ${chalk.white('| | | | | || | > ')}${chalk.cyan(' < |  __/| |')}
 ${chalk.white('|_| |_| |_||_|/_/')}${chalk.cyan('\\_\\ \\___||_|')}
-`)
-    console.log(`\nAddon is listening on ${chalk.green.underline(ADDRESS)}`)
 
-    if (!MANIFEST.dontAnnounce) {
-      console.log('Announcing the endpoint to Stremio tracker')
-    }
-    // tslint:enable:no-console
+
+
+${chalk.cyan(MANIFEST.endpoint)}
+
+`)
   })
 }
 
