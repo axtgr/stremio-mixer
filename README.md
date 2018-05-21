@@ -8,7 +8,17 @@ _[Stremio](https://www.stremio.com/) add-on with live broadcasts from Microsoft'
 
 The add-on is a node.js app written in TypeScript that retrieves stream URLs from Mixer using its REST API and provides them to Stremio. Supports in-memory caching and different levels of logging. Can be configured using environment variables and run in Docker.
 
-> Starting May 21 Mixer [will require](https://aka.ms/MixerDevIdentification) developers to register and pass an API token with each request. This isn't supported in their official node client yet, and, therefore, this add-on. Once it is implemented in the client, the add-on will be updated.
+
+## Registration
+
+Starting May 21<sup>st</sup> 2018 in order for this add-on to work you need to provide a Client ID as [required](https://aka.ms/MixerDevIdentification) by Mixer. To do this, follow these steps:
+
+- Create an account on https://mixer.com
+- Go to the [Dev Lab](https://mixer.com/lab/oauth)
+- Accept the Developer Agreement
+- Create an OAuth app
+- Copy its Client ID
+- Set the `STREMIO_MIXER_CLIENT_ID` environment variable to the copied value
 
 
 ## Installation
@@ -38,6 +48,7 @@ Boolean variables are defined as "true"/"false" strings.
 
 Variable                | Default Value     | Description
 ------------------------| ------------------| ---------------
+STREMIO_MIXER_CLIENT_ID |                   | Your Mixer app Client ID (required)
 STREMIO_MIXER_ADDRESS   | http://localhost  | Public address this add-on is going to be accessible on
 STREMIO_MIXER_PORT      | 80                | Port to listen to
 STREMIO_MIXER_EMAIL     |                   | Contact email
@@ -46,11 +57,16 @@ STREMIO_MIXER_ANNOUNCE  | false             | Toggle announcing the add-on to St
 STREMIO_MIXER_LOG       | 1                 | 0 to turn logging off, 1 to print errors, 2 to also print requests to Stremio methods, 3 to print all HTTP requests
 
 
-## License
+## Known Issues
 
-[ISC](LICENSE)
+- Mixer API doesn't provide stream thumbnails in a reliable way. Because of that, some of the posters in the stream list might be blank.
 
 
 ## Screenshots
 
 ![Screenshot](/public/screenshot.jpg)
+
+
+## License
+
+[ISC](LICENSE)
