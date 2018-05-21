@@ -16,6 +16,7 @@ import Logger from './Logger'
 const pkg = require('../package.json')
 const config = env().getOrElseAll({
   stremio_mixer: {
+    client_id: '',
     address: 'http://localhost',
     port: process.env.PORT || 80,
     cache: true,
@@ -25,9 +26,13 @@ const config = env().getOrElseAll({
   },
 }).stremio_mixer
 
+if (!config.client_id) {
+  throw new Error('Mixer Client ID is required')
+}
+
 const MANIFEST = {
   name: 'Mixer',
-  id: 'org.stremio.mixer',
+  id: 'org.stremio.mixera',
   version: pkg.version,
   description: pkg.description,
   email: config.email,
@@ -55,6 +60,7 @@ const MANIFEST = {
 
 let logger = new Logger({ level: config.log })
 let mixer = new Mixer({
+  clientId: config.client_id,
   idProperty: MANIFEST.idProperty,
   cache: config.cache,
 })

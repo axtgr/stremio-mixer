@@ -8,6 +8,7 @@ services:
       - "${STREMIO_MIXER_PORT-80}:${STREMIO_MIXER_PORT-80}"
     environment:
       - NODE_ENV=${NODE_ENV-production}
+      - STREMIO_MIXER_CLIENT_ID
       - STREMIO_MIXER_ADDRESS
       - STREMIO_MIXER_PORT
       - STREMIO_MIXER_CACHE

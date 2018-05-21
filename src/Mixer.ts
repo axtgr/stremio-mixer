@@ -16,6 +16,7 @@ type Channel = IChannel & {
 }
 
 interface Options {
+  clientId: string
   idProperty: string
   cache?: boolean
 }
@@ -56,10 +57,12 @@ function cacheable(ttl: number) {
 
 class Mixer {
   private client = new Client(new DefaultRequestRunner())
+  private clientId: string
   private idProperty: string
   private cache: NodeCache
 
   constructor(options: Options) {
+    this.clientId = options.clientId
     this.idProperty = options.idProperty
 
     if (options.cache) {
@@ -110,6 +113,7 @@ class Mixer {
     // https://dev.mixer.com/rest.html#types_get
 
     let options = {
+      headers: { 'Client-ID': this.clientId },
       qs: {
         fields: 'id',
         where: `name:eq:${typeName}`,
@@ -129,6 +133,7 @@ class Mixer {
 
     // We assume that skip is a multiple of limit, so pagination is simplified
     let { query, skip = 0, limit = 100 } = request
+    let headers = { 'Client-ID': this.clientId }
     let qs: any = {
       limit,
       page: Math.ceil(skip / limit) || 0,
@@ -149,7 +154,7 @@ class Mixer {
       qs.where = `typeId:eq:${typeId}`
     }
 
-    let res = await this.client.request('GET', 'channels', { qs })
+    let res = await this.client.request('GET', 'channels', { qs, headers })
     this._validateResponse(res)
     let results = res.body as Channel[] | undefined
     return results ? results.map((item) => this._transformChannel(item)) : []
@@ -162,6 +167,7 @@ class Mixer {
 
     let id = req.query[this.idProperty]
     let options = {
+      headers: { 'Client-ID': this.clientId },
       qs: {
         fields: CHANNEL_FIELDS,
       },
