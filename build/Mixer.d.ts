@@ -1,10 +1,12 @@
 import { Request, SearchRequest } from 'stremio-addons';
 interface Options {
+    clientId: string;
     idProperty: string;
     cache?: boolean;
 }
 declare class Mixer {
     private client;
+    private clientId;
     private idProperty;
     private cache;
     constructor(options: Options);

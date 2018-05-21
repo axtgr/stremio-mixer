@@ -45,6 +45,7 @@ function cacheable(ttl) {
 class Mixer {
     constructor(options) {
         this.client = new beam_client_node_1.Client(new beam_client_node_1.DefaultRequestRunner());
+        this.clientId = options.clientId;
         this.idProperty = options.idProperty;
         if (options.cache) {
             this.cache = new NodeCache({ checkperiod: 3 * 60 });
@@ -86,6 +87,7 @@ class Mixer {
         return __awaiter(this, void 0, void 0, function* () {
             // https://dev.mixer.com/rest.html#types_get
             let options = {
+                headers: { 'Client-ID': this.clientId },
                 qs: {
                     fields: 'id',
                     where: `name:eq:${typeName}`,
@@ -103,6 +105,7 @@ class Mixer {
             // Limited by the "channel-search" bucket to 20 requests per 5 seconds
             // We assume that skip is a multiple of limit, so pagination is simplified
             let { query, skip = 0, limit = 100 } = request;
+            let headers = { 'Client-ID': this.clientId };
             let qs = {
                 limit,
                 page: Math.ceil(skip / limit) || 0,
@@ -120,7 +123,7 @@ class Mixer {
                 qs.order = 'viewersCurrent:DESC';
                 qs.where = `typeId:eq:${typeId}`;
             }
-            let res = yield this.client.request('GET', 'channels', { qs });
+            let res = yield this.client.request('GET', 'channels', { qs, headers });
             this._validateResponse(res);
             let results = res.body;
             return results ? results.map((item) => this._transformChannel(item)) : [];
@@ -132,6 +135,7 @@ class Mixer {
             // Limited by the "channel-read" bucket to 1000 requests per 300 seconds
             let id = req.query[this.idProperty];
             let options = {
+                headers: { 'Client-ID': this.clientId },
                 qs: {
                     fields: CHANNEL_FIELDS,
                 },
