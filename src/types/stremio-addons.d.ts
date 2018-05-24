@@ -1,18 +1,18 @@
 declare module 'stremio-addons' {
   interface GenericRequest {
-    query: any
+    query?: any
     limit: number
     skip: number
   }
 
   interface Request extends GenericRequest {
-    query: {
+    query?: {
       [key: string]: any
     },
   }
 
   interface SearchRequest extends GenericRequest {
-    query: string
+    query?: string
   }
 
   interface Method<R extends object> {

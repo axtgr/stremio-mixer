@@ -131,6 +131,10 @@ class Mixer {
     // https://dev.mixer.com/rest.html#channels_get
     // Limited by the "channel-search" bucket to 20 requests per 5 seconds
 
+    if (!request.query) {
+      return []
+    }
+
     // We assume that skip is a multiple of limit, so pagination is simplified
     let { query, skip = 0, limit = 100 } = request
     let headers = { 'Client-ID': this.clientId }
@@ -165,6 +169,10 @@ class Mixer {
     // https://dev.mixer.com/rest.html#channels__channelIdOrToken__get
     // Limited by the "channel-read" bucket to 1000 requests per 300 seconds
 
+    if (!req.query) {
+      return
+    }
+
     let id = req.query[this.idProperty]
     let options = {
       headers: { 'Client-ID': this.clientId },
@@ -181,6 +189,10 @@ class Mixer {
 
   async getStreams(req: Request) {
     // https://dev.mixer.com/rest.html#channels__channelId__manifest_m3u8_get
+
+    if (!req.query) {
+      return []
+    }
 
     let id = req.query[this.idProperty]
     let url = this.client.buildAddress(
