@@ -32,7 +32,7 @@ if (!config.client_id) {
 
 const MANIFEST = {
   name: 'Mixer',
-  id: 'org.stremio.mixera',
+  id: 'org.stremio.mixer',
   version: pkg.version,
   description: pkg.description,
   email: config.email,
