@@ -127,16 +127,16 @@ class Mixer {
   }
 
   @cacheable(CACHE_TTLS.findChannels)
-  async findChannels(request: Request | SearchRequest) {
+  async findChannels(req: Request | SearchRequest) {
     // https://dev.mixer.com/rest.html#channels_get
     // Limited by the "channel-search" bucket to 20 requests per 5 seconds
 
-    if (!request.query) {
+    if (!req.query) {
       return []
     }
 
     // We assume that skip is a multiple of limit, so pagination is simplified
-    let { query, skip = 0, limit = 100 } = request
+    let { query, skip = 0, limit = 100 } = req
     let headers = { 'Client-ID': this.clientId }
     let qs: any = {
       limit,
