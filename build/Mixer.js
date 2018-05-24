@@ -99,12 +99,15 @@ class Mixer {
             return body && body[0] && body[0].id;
         });
     }
-    findChannels(request) {
+    findChannels(req) {
         return __awaiter(this, void 0, void 0, function* () {
             // https://dev.mixer.com/rest.html#channels_get
             // Limited by the "channel-search" bucket to 20 requests per 5 seconds
+            if (!req.query) {
+                return [];
+            }
             // We assume that skip is a multiple of limit, so pagination is simplified
-            let { query, skip = 0, limit = 100 } = request;
+            let { query, skip = 0, limit = 100 } = req;
             let headers = { 'Client-ID': this.clientId };
             let qs = {
                 limit,
@@ -133,6 +136,9 @@ class Mixer {
         return __awaiter(this, void 0, void 0, function* () {
             // https://dev.mixer.com/rest.html#channels__channelIdOrToken__get
             // Limited by the "channel-read" bucket to 1000 requests per 300 seconds
+            if (!req.query) {
+                return;
+            }
             let id = req.query[this.idProperty];
             let options = {
                 headers: { 'Client-ID': this.clientId },
@@ -149,6 +155,9 @@ class Mixer {
     getStreams(req) {
         return __awaiter(this, void 0, void 0, function* () {
             // https://dev.mixer.com/rest.html#channels__channelId__manifest_m3u8_get
+            if (!req.query) {
+                return [];
+            }
             let id = req.query[this.idProperty];
             let url = this.client.buildAddress(this.client.urls.api, `channels/${id}/manifest.m3u8`);
             return [

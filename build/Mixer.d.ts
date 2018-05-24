@@ -13,7 +13,7 @@ declare class Mixer {
     private _validateResponse(res);
     private _transformChannel(channel);
     private _getTypeId(typeName);
-    findChannels(request: Request | SearchRequest): Promise<{
+    findChannels(req: Request | SearchRequest): Promise<{
         id: string;
         name: string;
         description: string;

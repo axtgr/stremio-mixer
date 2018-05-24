@@ -98,8 +98,7 @@ if (require.main === module) {
     app.use(express.static('public'));
     app.use(addon.middleware);
     app.listen(config.port, () => {
-        // Prints "mixer" ASCII art in its brand colors
-        // and the endpoint address
+        // Print a "mixer" ASCII art in its brand colors and the endpoint address
         // tslint:disable-next-line:no-console
         console.log(`\
 ${chalk_1.default.white('            _')}
