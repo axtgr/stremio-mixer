@@ -10,9 +10,9 @@ declare class Mixer {
     private idProperty;
     private cache;
     constructor(options: Options);
-    private _validateResponse(res);
-    private _transformChannel(channel);
-    private _getTypeId(typeName);
+    private _validateResponse;
+    private _transformChannel;
+    private _getTypeId;
     findChannels(req: Request | SearchRequest): Promise<{
         id: string;
         name: string;
