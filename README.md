@@ -2,16 +2,18 @@
 
 ---
 
-_[Stremio](https://www.stremio.com/) add-on with live broadcasts from Microsoft's innovative streaming platform, [Mixer](https://mixer.com/)_
+🏆 __[Third-place winner in Stremio Add-On Contest](http://blog.stremio.com/stremio-addon-contest-winners)__ 🎉
 
 ---
 
-The add-on is a node.js app written in TypeScript that retrieves stream URLs from Mixer using its REST API and provides them to Stremio. Supports in-memory caching and different levels of logging. Can be configured using environment variables and run in Docker.
+This is a [Stremio](https://www.stremio.com/) add-on with live broadcasts from Microsoft's innovative streaming platform, [Mixer](https://mixer.com/).
+
+It is a node.js app written in TypeScript that retrieves stream URLs from Mixer using its REST API and provides them to Stremio. Supports in-memory caching and different levels of logging. Can be configured using environment variables and run in Docker.
 
 
 ## Registration
 
-Starting May 21<sup>st</sup> 2018 in order for this add-on to work you need to provide a Client ID as [required](https://aka.ms/MixerDevIdentification) by Mixer. To do this, follow these steps:
+Starting May 21<sup>st</sup> 2018 in order for this add-on to work, you need to provide a Client ID as [required](https://aka.ms/MixerDevIdentification) by Mixer. To do this, follow these steps:
 
 - Create an account on https://mixer.com
 - Go to the [Dev Lab](https://mixer.com/lab/oauth)
