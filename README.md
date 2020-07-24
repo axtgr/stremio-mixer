@@ -6,6 +6,8 @@
 
 ---
 
+__DEPRECATED:__ As of July 22 2020, Microsoft has closed Mixer.
+
 This is a [Stremio](https://www.stremio.com/) add-on with live broadcasts from Microsoft's innovative streaming platform, [Mixer](https://mixer.com/).
 
 It is a node.js app written in TypeScript that retrieves stream URLs from Mixer using its REST API and provides them to Stremio. Supports in-memory caching and different levels of logging. Can be configured using environment variables and run in Docker.
